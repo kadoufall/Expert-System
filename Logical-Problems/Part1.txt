@@ -1,0 +1,112 @@
+全部采用CLIPS
+三个文件，lab2-1-1.clp, lab2-1-2.clp, lab2-1-2.clp
+分别(load "**.clp"),(reset),(run)即可
+
+一、过河 
+1.思路：
+首先定义状态模版，该模版记录了两岸有哪些人，分别由多少个人，以及船的位置，
+	所以初始状态为所有人和船在左边，目标状态是所有人和船在右边
+其次定义规则，对于每一种状态，根据船的位置判断下一次move结束后新的状态并assert
+	而因为只有三个人会划船，并且在船上的两个人不能出现限制中的情况，所以分为了
+	policeman带criminal、father、mother、daughter、son；
+	father带mother、son；mother带daughter以及policeman、father、mother单独上船等11种情况
+	对于每种情况assert新的状态
+接着对于两岸Move后的状态，需要满足限制条件，删除不满足的状态事实。并且删除状态重复的事实
+最后根据最后的目标状态根据parent这个slot的值反推出每一步的状态事实。最后打印出来。
+
+程序得到的只有两个答案，实际因为daughter和son有两个，所以可以有八种选择
+
+2.答案
+
+Solution-1:
+Move policeman and criminal to shore-2.
+Move policeman to shore-1.
+Move policeman and son to shore-2.		// 这一步policeman可以选择一个son带过去
+Move policeman and criminal to shore-1.
+Move father and son to shore-2.
+Move father to shore-1.
+Move father and mother to shore-2.
+Move mother to shore-1.
+Move policeman and criminal to shore-2.
+Move father to shore-1.
+Move father and mother to shore-2.
+Move mother to shore-1.
+Move mother and daughter to shore-2.		// 这一步mother可以选择一个daughter带过去
+Move policeman and criminal to shore-1.
+Move policeman and daughter to shore-2.
+Move policeman to shore-1.
+Move policeman and criminal to shore-2.
+
+上面两个选择可以出现四种不同的答案
+
+下面这个就是policeman先带daughter过去，思路和上面一样
+
+Solution-2:
+Move policeman and criminal to shore-2.
+Move policeman to shore-1.
+Move policeman and daughter to shore-2.
+Move policeman and criminal to shore-1.
+Move mother and daughter to shore-2.
+Move mother to shore-1.
+Move father and mother to shore-2.
+Move father to shore-1.
+Move policeman and criminal to shore-2.
+Move mother to shore-1.
+Move father and mother to shore-2.
+Move father to shore-1.
+Move father and son to shore-2.
+Move policeman and criminal to shore-1.
+Move policeman and son to shore-2.
+Move policeman to shore-1.
+Move policeman and criminal to shore-2.
+
+
+
+二、
+1.思路
+给定Nationality Color Pet Drink Smokes分别由五种，最后每个对应到1 2 3 4 5五个位置，穷举出所有可能出现的情况
+定义statement模版，槽值分别代表location Nationality Color Pet Drink Smokes
+
+将现有的描述划分为两类，一类为直接对应一个statement，即如“The English lives in the red house”
+第二类为对应两个statement，即如“The green house is just to the left of the white one”
+对于第一类描述，定义规则删除不满足的事实。所有这一类事实检测完可以大规模减少存在的事实
+对于第二种描述，在最后匹配找答案的规则RHS中，逐个检测LHS左侧匹配到的五个事实是否满足第二类的描述
+
+Solution: The German keeps fish
+
+The total information: 
+Index | Nationality | Color  | Drink  | Pet    | Smokes    
+----------------------------------------------------------------
+  1   | Norwegian   | yellow | water  | cats   | Dunhill   
+  2   | Danish      | blue   | tea    | horses | Blend     
+  3   | English     | red    | milk   | birds  | The-Pall-Mall
+  4   | German      | green  | coffee | fish   | Prince    
+  5   | Swedish     | white  | beer   | dogs   | Blue-Master 
+
+
+三、
+1.思路
+给定name car Gas-Mileage分别由五种，最后每个对应到1 2 3 4 5五个位置
+穷举出所有可能出现的情况，每一种情况采用（对象，值，归属位置）三元组表示。于是问题的答案就应该为12个事实
+定义规则，使其LHS根据描述对事实进行限制，在描述的限制下匹配的12个事实就可以在RHS中进行输出
+对于说谎的情况，说谎下规则的LHS就会变化。
+所以首先对说谎的情况进行分析，显然肯定有两个说谎，并且Tito和Doc有句话是一样的。所以这两个要么同时说谎，要么同时不说谎
+所以分为两种情况下的规则，Doc和Tito说谎，George和Jimmy说谎。
+由于这个问题下的描述中并没有出现Gas-Mileage为15和26的内容，并且出现了“the guy who drives the Dodge”这种与归属位置无关的信息，
+	所有LHS匹配的事实中就可能出现多于4种Gas-Mileage的情况
+	所以在RHS中就得先判断LHS匹配的事实中所有对象为Gas-Mileage的事实必须只有4种，以避免重复
+
+2.答案
+
+Index | Name        | Car          | Gas-Mileage  
+-------------------------------------------------
+  1   | George      | Chevrolet    | 25           
+  2   | Doc         | Dodge        | 15           
+  3   | Tito        | Toyota       | 20           
+  4   | Jimmy       | Ford         | 30           
+
+
+
+
+
+
