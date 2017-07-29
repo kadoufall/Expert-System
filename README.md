@@ -1,6 +1,6 @@
 # Expert-System
 
-基于[CLIPS](http://www.clipsrules.net/)实现的简单专家系统，主题是四川旅游
+基于[CLIPS](http://www.clipsrules.net/)实现的简单专家系统，主题是四川旅游
 
  - 猜测用户描述的旅游地在哪里
 	- 使用前：`（clear）(load) (reset) (run) `
@@ -129,6 +129,7 @@ The question to be answered is: Who keeps fish?
 - Solution: The German keeps fish
 
 The total information: 
+
 | Index | Nationality | Color  | Drink  | Pet    | Smokes |
 |:---:|:---:|:---:|:---:|:---:|:---:|
 |  1   | Norwegian   | yellow | water  | cats   | Dunhill|
@@ -164,7 +165,7 @@ Question: What kind of car does each man drive and what gas mileage (mpg) does e
 
 - 答案
 
-|Index | Name        | Car          | Gas-Mileage  
+|Index | Name        | Car          | Gas-Mileage | 
 |:---:|:---:|:---:|:---:|
 |  1   | George      | Chevrolet    | 25   |       
 |  2   | Doc         | Dodge        | 15    |       
